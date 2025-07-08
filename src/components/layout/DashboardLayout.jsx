@@ -1,4 +1,3 @@
-// src/components/layout/DashboardLayout.jsx
 import { Outlet } from "react-router-dom";
 import React from "react";
 import Navbar from "./Navbar";
@@ -6,20 +5,17 @@ import Footer from "./Footer";
 
 export default function DashboardLayout() {
   return (
-    <div className="flex flex-col min-h-screen">
+    // The main container now has the dark background color.
+    <div className="flex flex-col min-h-screen bg-background">
       <Navbar /> {/* Fixed at the top */}
       
       {/* Main Content Area - Scrollable */}
-      <main className="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"> {/* Content area padding and max-width */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100 min-h-[calc(100vh-10rem)]"> 
-            {/* 
-              min-h calculation is approximate: 
-              10rem ~ 160px (rough estimate for navbar + footer + main padding Y).
-              This ensures the white card takes up significant space even if content is short.
-              The `flex-1` on main handles the overall stretching.
-            */}
-            <React.Suspense fallback={<div className="text-center py-20 text-lg text-gray-500">Loading page content...</div>}>
+      {/* The background is removed to let the main container's color show through. */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          {/* This now uses the dark 'card' color from your theme. */}
+          <div className="bg-card rounded-2xl shadow-xl p-6 sm:p-8 border border-border min-h-[calc(100vh-10rem)]"> 
+            <React.Suspense fallback={<div className="text-center py-20 text-lg text-muted-foreground">Loading page content...</div>}>
               <Outlet />
             </React.Suspense>
           </div>

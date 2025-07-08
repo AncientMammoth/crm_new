@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional global font-family resets:
-   We'll rely on inline or class styles for special fonts. */
-body {
-  font-family: 'Open Sans', sans-serif;
+@layer base {
+  body {
+    /* Apply the background and foreground colors from your tailwind config */
+    @apply bg-background text-foreground;
+  }
 }
