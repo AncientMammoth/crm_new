@@ -1,114 +1,175 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
-
-// You will need to create this Button component or adapt it.
-// A basic version is provided in the UI Components section below.
-import { Button } from '../ui/button'; 
-
-// A simplified Dropdown for mobile view.
-// You can build this out using the Radix UI components you installed.
-const DropdownMenu = ({ children }) => <div className="relative">{children}</div>;
-const DropdownMenuTrigger = ({ children }) => <div>{children}</div>;
-const DropdownMenuContent = ({ children }) => (
-  <div className="absolute right-0 mt-2 w-screen max-w-xs p-4 border border-white/10 bg-[#1D1D1D] rounded-2xl shadow-2xl">
-    {children}
-  </div>
-);
-
+import React from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { UserCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+  const userName = localStorage.getItem("userName") || "User";
+  
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
 
-  const navLinks = [
-    { href: "/", label: "Dashboard" },
-    { href: "/accounts", label: "Accounts" },
-    { href: "/projects", label: "Projects" },
-    { href: "/orders", label: "Orders" },
-  ];
+  // --- Re-introducing state and refs for a timer-based hover ---
+  const [showMenu, setShowMenu] = React.useState(false);
+  const [showTasksMenu, setShowTasksMenu] = React.useState(false);
+  const menuTimer = React.useRef(null);
+  const tasksMenuTimer = React.useRef(null);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  // --- Handlers for the '+' menu ---
+  const handleMenuEnter = () => {
+    clearTimeout(menuTimer.current);
+    setShowMenu(true);
+  };
+  const handleMenuLeave = () => {
+    menuTimer.current = setTimeout(() => {
+      setShowMenu(false);
+    }, 250); // 250ms grace period
+  };
+
+  // --- Handlers for the 'Tasks' menu ---
+  const handleTasksMenuEnter = () => {
+    clearTimeout(tasksMenuTimer.current);
+    setShowTasksMenu(true);
+  };
+  const handleTasksMenuLeave = () => {
+    tasksMenuTimer.current = setTimeout(() => {
+      setShowTasksMenu(false);
+    }, 250); // 250ms grace period
+  };
+
 
   return (
-    <AnimatePresence>
-      <motion.header
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-        className="w-full max-w-[1920px] px-4 sm:px-8 md:px-12 mx-auto flex items-center justify-center text-white"
-      >
-        <div className="container flex items-center justify-between w-full lg:py-12 py-8">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            {/* Replace with your logo or the new one */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="32" height="32" rx="8" fill="white"/>
-            </svg>
-          </Link>
-
-          {/* Nav Links (Desktop) */}
-          <nav className="hidden xl:flex text-lg items-center space-x-10 relative">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <div key={link.href} className="relative flex flex-col items-center">
-                  <Link to={link.href} className="hover:text-white/80 transition">
-                    {link.label}
-                  </Link>
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.div
-                        layoutId="navbar-underline"
-                        className="absolute -bottom-2 left-0 right-0 h-[3px] rounded-full bg-white"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </nav>
-          
-          {/* Actions (Desktop) */}
-          <div className="hidden xl:flex items-center space-x-3">
-             <Button variant="outline">Login</Button>
-             <Button>Book a Demo</Button>
+    <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo and Title */}
+          <div className="flex items-center space-x-3">
+            <img
+              src="/assets/logo.png"
+              alt="Logo"
+              className="w-12 h-12 mt-2 object-contain rounded"
+            />
+            <Link to="/" className="text-2xl font-bold text-primary tracking-tight font-merriweather">
+              Key Accounts Management
+            </Link>
           </div>
-
-
-          {/* Mobile Menu Button */}
-          <div className="xl:hidden flex items-center">
-            <button
-                onClick={() => setOpen(!open)}
-                aria-label="Open menu"
-                className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-sm bg-transparent"
-            >
-                <span className="flex flex-col items-center justify-center w-6 h-6 gap-1.5">
-                    <span className="w-6 h-0.5 bg-white rounded-full"/>
-                    <span className="w-6 h-0.5 bg-white rounded-full"/>
-                </span>
-            </button>
-          </div>
-          {open && (
-             <div className="xl:hidden absolute top-24 right-4 z-20">
-                 <DropdownMenu>
-                     <DropdownMenuContent>
-                         <nav className="flex flex-col gap-8 text-lg text-white">
-                             {navLinks.map(link => (
-                                 <Link key={link.href} to={link.href} className="hover:text-white/80 transition" onClick={() => setOpen(false)}>{link.label}</Link>
-                             ))}
-                         </nav>
-                         <div className="flex flex-col items-center gap-3 w-full mt-6">
-                            <Button variant="outline" className="w-full h-[46px]">Login</Button>
-                            <Button className="w-full h-[46px]">Book a Demo</Button>
-                         </div>
-                     </DropdownMenuContent>
-                 </DropdownMenu>
-             </div>
+          {/* Navigation Links */}
+          {!isLoginPage && (
+            <nav className="hidden md:flex space-x-8 text-sm font-medium font-open-sans">
+              <Link to="/" className="text-gray-700 hover:text-primary transition-colors duration-150">Home</Link>
+              <Link to="/accounts" className="text-gray-700 hover:text-primary transition-colors duration-150">Accounts</Link>
+              <Link to="/projects" className="text-gray-700 hover:text-primary transition-colors duration-150">Projects</Link>
+              <Link to="/updates" className="text-gray-700 hover:text-primary transition-colors duration-150">Updates</Link>
+              
+              <div className="relative flex items-center" onMouseEnter={handleTasksMenuEnter} onMouseLeave={handleTasksMenuLeave}>
+                <button className="flex items-center text-gray-700 hover:text-primary transition-colors duration-150">
+                  Tasks
+                  <ChevronDownIcon className="h-4 w-4 ml-1" />
+                </button>
+                {showTasksMenu && (
+                  <div className="absolute left-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-40 py-2">
+                    <Link
+                      to="/tasks"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      View Assigned Tasks
+                    </Link>
+                    <Link
+                      to="/my-tasks"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      My Tasks
+                    </Link>
+                    <div className="border-t my-1 border-gray-100"></div>
+                    <Link
+                      to="/create-task"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      + Create New Task
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </nav>
           )}
+          {/* Right Side: Quick Create, User Name, User Menu */}
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            {!isLoginPage && (
+              <div className="relative" onMouseEnter={handleMenuEnter} onMouseLeave={handleMenuLeave}>
+                <button
+                  className="p-1.5 sm:p-2 rounded-full text-primary hover:bg-gray-100 transition-colors duration-150"
+                  title="Quick Create"
+                >
+                  <PlusIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                </button>
+                {showMenu && (
+                  <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-40 py-2">
+                    <Link
+                      to="/create-account"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      + New Account
+                    </Link>
+                    <Link
+                      to="/create-project"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      + New Project
+                    </Link>
+                    <Link
+                      to="/create-update"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      + New Update
+                    </Link>
+                    <Link
+                        to="/create-task"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                        + New Task
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+            {/* User Name or Login */}
+            <span className="hidden sm:inline-block text-gray-700 font-semibold font-open-sans px-2">
+              {isLoginPage ? (
+                <span className="text-primary font-bold">Login</span>
+              ) : (
+                userName
+              )}
+            </span>
+            {/* User Menu (uses CSS group-hover, which is fine for this simple menu) */}
+            {!isLoginPage && (
+              <div className="relative group">
+                <UserCircleIcon className="h-7 w-7 sm:h-8 sm:w-8 text-gray-500 cursor-pointer hover:text-primary transition-colors duration-150" />
+                <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-20 py-1">
+                  <Link
+                    to="/profile"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary"
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary"
+                    onClick={handleLogout}
+                  >
+                    Log out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </motion.header>
-    </AnimatePresence>
+      </div>
+    </header>
   );
 }
