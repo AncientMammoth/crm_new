@@ -1,24 +1,21 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-// Correct v2 Heroicons imports - added PlusIcon and ChevronDownIcon
 import { BellIcon, Bars3Icon as MenuAlt1Icon, PlusIcon } from '@heroicons/react/24/outline';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 
-/* IMPORTANT: To use the "Inter" font, make sure to add the following lines 
-  to the <head> of your main HTML file (e.g., public/index.html):
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+/* IMPORTANT: To use a thicker "Inter" font, you must include the desired weights in your main HTML file.
+  Update the <link> in your public/index.html <head> section to include weights like 600 (semibold) or 800 (extrabold).
+
+  The new link should look like this:
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 */
 
 // A utility function for conditional class names.
-// You should have this file in your project: lib/utils.js
-// export function cn(...inputs) { return inputs.filter(Boolean).join(' ') }
 const cn = (...inputs) => inputs.filter(Boolean).join(' ');
 
 export default function Navbar({ setSidebarOpen }) {
-  // Navigation links for the center of the navbar
+  // Data for navigation links remains unchanged
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Accounts', href: '/accounts' },
@@ -26,14 +23,12 @@ export default function Navbar({ setSidebarOpen }) {
     { name: 'Updates', href: '/updates' },
   ];
 
-  // Dropdown items for the "Tasks" menu
   const tasksNavigation = [
     { name: 'View Assigned Tasks', href: '/tasks' },
     { name: 'My Tasks', href: '/my-tasks' },
     { name: 'Create New Task', href: '/create-task' },
   ];
   
-  // Dropdown items for the "Quick Create" (+) menu
   const createNavigation = [
       { name: 'New Account', href: '/create-account' },
       { name: 'New Project', href: '/create-project' },
@@ -41,17 +36,16 @@ export default function Navbar({ setSidebarOpen }) {
       { name: 'New Task', href: '/create-task' },
   ];
 
-  // Dropdown items for the user profile menu
   const userNavigation = [
     { name: 'Your Profile', href: '/profile' },
     { name: 'Sign out', href: '/logout' },
   ];
 
   return (
-    // The header uses the dark 'card' color, is sticky, and font is set to 'Inter'
+    // The header now has a default font weight applied via the style prop.
     <header 
       className="sticky top-0 z-30 flex h-16 w-full flex-shrink-0 items-center bg-card shadow-md"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }} // Changed: Applied a medium font weight (500)
     >
       
       {/* Mobile Menu Button - opens the sidebar */}
@@ -71,11 +65,12 @@ export default function Navbar({ setSidebarOpen }) {
         <div className="flex items-center space-x-8">
           {/* Logo and Title */}
           <Link to="/" className="flex items-center space-x-2">
-            {/* A simple SVG logo inspired by Rian.io's blue theme */}
-            <svg className="h-7 w-auto text-blue-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-            </svg>
-            <span className="font-bold text-xl text-foreground tracking-tight">Rian.io</span>
+            <img
+              className="h-8 w-auto"
+              src="/rian-logo-footer.svg" // Assuming your logo is in the public folder
+              alt="Rian Logo"
+            />
+            
           </Link>
 
           {/* Central Navigation Links */}

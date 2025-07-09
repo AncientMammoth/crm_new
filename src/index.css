@@ -4,7 +4,29 @@
 
 @layer base {
   body {
-    /* Apply the background and foreground colors from your tailwind config */
-    @apply bg-background text-foreground;
+    /*
+      BEFORE: background-color: theme('colors.background');
+      
+      AFTER: Changed to use the 'card' color for a consistent dark theme.
+    */
+    background-color: theme('colors.card');
+    color: theme('colors.foreground');
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
   }
+}
+
+/* This is the grainy background effect */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  background-repeat: repeat;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: -1;
 }

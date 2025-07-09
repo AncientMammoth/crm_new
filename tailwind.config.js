@@ -6,26 +6,35 @@ export default {
   ],
   theme: {
     extend: {
-      // Add the rian.io color palette
+      // Color palette for the rian.io theme
       colors: {
-        background: '#0D0D0D', // Main dark background
-        foreground: '#FFFFFF', // Main text color
-        card: '#1D1D1D',       // Card background from the new theme
+        background: '#0D0D0D',
+        foreground: '#FFFFFF',
+        card: '#262626',
         'card-foreground': '#FFFFFF',
         primary: '#FFFFFF',
         'primary-foreground': '#0D0D0D',
-        secondary: '#232323',   // Secondary background color
+        secondary: '#232323',
         'secondary-foreground': '#FFFFFF',
-        muted: '#A1A1A1',       // Muted text color for subtitles
+        muted: '#A1A1A1',
         'muted-foreground': '#D1D5DB',
         accent: {
-          DEFAULT: '#67F5C8',  // Default accent color from gradient
-          secondary: '#ADFF15', // Secondary accent color from gradient
+          DEFAULT: '#67F5C8',
+          secondary: '#ADFF15',
         },
-        border: 'hsl(0 0% 100% / 0.1)', // Border color for UI elements
+        border: 'hsl(0 0% 100% / 0.1)',
         input: 'hsl(0 0% 100% / 0.1)',
       },
-      // Adds the 'shine' animation for the border effect
+      // CHANGED: 'Onest' is now 'Geist Sans'
+      fontFamily: {
+        sans: ['"Geist Sans"', 'sans-serif'],
+      },
+      letterSpacing: {
+        tight: '-0.015em',
+        normal: '0',
+        wide: '0.015em',
+      },
+      // Keyframe animation for the shine effect
       keyframes: {
         shine: {
           '0%': { backgroundPosition: '200% 0' },
