@@ -57,7 +57,7 @@ export default function Home() {
 
     // This is the new JSX with all the rian.io styling and effects
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 space-y-24">
 
             {/* Section 1: Welcome Header with updated font styles */}
             <motion.header 
@@ -82,17 +82,17 @@ export default function Home() {
                 aria-labelledby="summary-heading"
                 className="relative" // Parent container for the aurora
             >
-                {/* THIS IS THE AURORA DIV - It sits behind the cards */}
+                {/* THIS IS THE AURORA DIV - It sits behind the cards 
                 <div 
                   className="absolute -top-32 left-1/2 -z-10 h-[40rem] w-[60rem] -translate-x-1/2 [background:radial-gradient(50%_50%_at_50%_50%,#7634d2_0%,rgba(255,255,255,0)_100%)] opacity-20"
                   aria-hidden="true" 
-                />
+                />*/}
 
                 <h2 id="summary-heading" className="sr-only">Summary Statistics</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {summaryStats.map((stat) => (
                         <div key={stat.title} className="relative group">
-                            <div className="relative bg-secondary border border-border rounded-2xl p-6 flex flex-col justify-between h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+                            <div className="relative bg-[#333333] border border-border rounded-2xl p-6 flex flex-col justify-between h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
                                 <ShineBorder
                                     className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                     shineColor={["#67F5C8", "#ADFF15", "#F1FA38"]}
@@ -103,7 +103,7 @@ export default function Home() {
                                     {/* CHANGED: font-semibold to font-light */}
                                     <h3 className="text-lg font-light text-foreground">{stat.title}</h3>
                                     {/* NOTE: Kept font-bold here for emphasis on the number */}
-                                    <p className="text-5xl font-bold text-foreground my-2">{stat.count}</p>
+                                    <p className="text-5xl font-light text-foreground my-2">{stat.count}</p>
                                 </div>
                                 <Link to={stat.link} className="relative z-10 mt-4 text-sm font-medium text-muted-foreground hover:text-white flex items-center">
                                     View {stat.title}
@@ -134,7 +134,7 @@ export default function Home() {
                             View All &rarr;
                         </Link>
                     </div>
-                    <div className="bg-secondary border border-border rounded-2xl overflow-hidden">
+                    <div className="bg-[#333333] border border-border rounded-2xl overflow-hidden">
                         {tasksLoading ? (
                             <p className="text-center text-muted-foreground p-12">Loading tasks...</p>
                         ) : upcomingTasks.length > 0 ? (
@@ -181,13 +181,16 @@ export default function Home() {
                     <h2 id="actions-heading" className="text-2xl font-light text-foreground mb-6">Quick Actions</h2>
                     <div className="flex flex-col gap-4">
                         <Link to="/create-account">
-                            <Button variant="outline" className="w-full justify-start text-base py-6"><PlusIcon className="h-5 w-5 mr-3"/> New Account</Button>
+                            <Button className="w-full justify-start text-base py-6 bg-[#333333] hover:bg-[#2E2E2E] text-foreground border-transparent"><PlusIcon className="h-5 w-5 mr-3"/> New Account</Button>
                         </Link>
                         <Link to="/create-project">
-                            <Button variant="outline" className="w-full justify-start text-base py-6"><PlusIcon className="h-5 w-5 mr-3"/> New Project</Button>
+                            <Button className="w-full justify-start text-base py-6 bg-[#333333] hover:bg-[#2E2E2E] text-foreground border-transparent"><PlusIcon className="h-5 w-5 mr-3"/> New Project</Button>
+                        </Link>
+                        <Link to="/create-update">
+                            <Button className="w-full justify-start text-base py-6 bg-[#333333] hover:bg-[#2E2E2E] text-foreground border-transparent"><PlusIcon className="h-5 w-5 mr-3"/> New Update</Button>
                         </Link>
                         <Link to="/create-task">
-                            <Button variant="outline" className="w-full justify-start text-base py-6"><PlusIcon className="h-5 w-5 mr-3"/> New Task</Button>
+                            <Button className="w-full justify-start text-base py-6 bg-[#333333] hover:bg-[#2E2E2E] text-foreground border-transparent"><PlusIcon className="h-5 w-5 mr-3"/> New Task</Button>
                         </Link>
                     </div>
                 </motion.section>

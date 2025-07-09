@@ -4,6 +4,8 @@ import React, { useState, useRef } from "react";
 import { fetchUserBySecretKey } from "../api";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
+import { motion } from 'framer-motion';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 
 // Define your admin's secret key here.
@@ -18,9 +20,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const inputRef = useRef();
 
-  // You can use your custom color classes here
-  const primaryColor = "text-primary";
-
   const handleInputChange = async (e) => {
     const value = e.target.value.replace(/\D/g, ""); // Only digits
     setValue("secretKey", value);
@@ -33,7 +32,9 @@ export default function Login() {
         if (!user) {
           setLoginError("Invalid secret key. Please try again.");
           setValue("secretKey", "");
-          inputRef.current.value = "";
+          if(inputRef.current) {
+            inputRef.current.value = "";
+          }
           setLoading(false);
           return;
         }
@@ -61,7 +62,9 @@ export default function Login() {
       } catch (err) {
         setLoginError("Authentication failed. Please check your connection and try again.");
         setValue("secretKey", "");
-        inputRef.current.value = "";
+        if(inputRef.current) {
+            inputRef.current.value = "";
+        }
         setLoading(false);
       }
     }
@@ -70,31 +73,40 @@ export default function Login() {
   return (
     <>
       <Navbar />
-      <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 to-white px-4 sm:px-6 lg:px-8">
-        <div className="max-w-xl w-full space-y-10 p-14 bg-white rounded-3xl shadow-2xl border border-gray-100">
+      <div className="min-h-[80vh] flex items-center justify-center bg-card px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md w-full space-y-8 p-10 bg-[#333333] rounded-2xl border border-border"
+        >
           <div className="flex flex-col items-center space-y-4">
-            <h2 className={`text-4xl font-extrabold text-center ${primaryColor} font-merriweather`}>
+            <div className="p-3 bg-secondary rounded-full border border-border">
+                <LockClosedIcon className="h-8 w-8 text-foreground" />
+            </div>
+            <h2 className="text-4xl font-light text-center text-foreground">
               Sign in to your account
             </h2>
-            <p className="text-base text-gray-600 text-center max-w-xs leading-relaxed">
+            <p className="text-base text-muted-foreground text-center max-w-xs leading-relaxed">
               Enter your 6-digit secret key to continue
             </p>
           </div>
-          <form className="space-y-8 w-full" autoComplete="off" onSubmit={e => e.preventDefault()}>
+          <form className="space-y-6 w-full" autoComplete="off" onSubmit={e => e.preventDefault()}>
             <div>
-              <label className="block text-md font-semibold text-gray-700 mb-2">
+              <label htmlFor="secretKey" className="sr-only">
                 Secret Key
               </label>
               <input
+                id="secretKey"
                 {...register("secretKey", {
                   required: "Secret key is required",
-                  minLength: 6,
-                  maxLength: 6,
-                  pattern: /^\d{6}$/,
+                  minLength: { value: 6, message: "Key must be 6 digits" },
+                  maxLength: { value: 6, message: "Key must be 6 digits" },
+                  pattern: { value: /^\d{6}$/, message: "Key must be 6 digits" },
                 })}
                 type="password"
-                placeholder="Enter 6-digit secret key"
-                className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-50 text-gray-900 placeholder-gray-400 py-4 px-5 text-center tracking-widest text-2xl font-mono placeholder:text-sm"
+                placeholder="● ● ● ● ● ●"
+                className="block w-full rounded-lg border border-border bg-secondary shadow-sm focus:border-primary focus:ring-primary text-foreground placeholder-muted-foreground py-4 px-5 text-center tracking-[1.5em] text-2xl font-mono placeholder:tracking-normal"
                 disabled={loading}
                 autoFocus
                 maxLength={6}
@@ -105,21 +117,27 @@ export default function Login() {
                 spellCheck="false"
               />
               {errors.secretKey && (
-                <span className="text-red-600 text-sm mt-1 block">{errors.secretKey.message}</span>
+                <span className="text-red-500 text-sm mt-2 block text-center">{errors.secretKey.message}</span>
               )}
             </div>
-            {/* No submit button */}
           </form>
           {loginError && (
-            <div className="text-red-600 text-center text-sm mt-4 font-semibold">{loginError}</div>
+            <div className="text-red-500 text-center text-sm font-medium">{loginError}</div>
           )}
-          <p className="text-xs text-gray-500 text-center mt-6 max-w-xs mx-auto leading-relaxed">
-            Ask admin for your key
-          </p>
-          <p className="text-xs text-yellow-700 text-center mt-2 font-semibold max-w-xs mx-auto leading-relaxed">
-            Please <span className="underline">do not share</span> your secret key with anyone.
-          </p>
-        </div>
+          {loading && (
+            <div className="flex justify-center items-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
+            </div>
+          )}
+          <div className="text-center">
+            <p className="text-xs text-muted-foreground mt-6 max-w-xs mx-auto leading-relaxed">
+              Ask your administrator for your key.
+            </p>
+            <p className="text-xs text-yellow-500/80 mt-2 font-medium max-w-xs mx-auto leading-relaxed">
+              Please <span className="underline">do not share</span> your secret key with anyone.
+            </p>
+          </div>
+        </motion.div>
       </div>
       <Footer />
     </>

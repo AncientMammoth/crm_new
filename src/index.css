@@ -5,14 +5,14 @@
 @layer base {
   body {
     /*
-      BEFORE: background-color: theme('colors.background');
+      BEFORE: font-family: 'Inter', sans-serif; font-weight: 300;
       
-      AFTER: Changed to use the 'card' color for a consistent dark theme.
+      AFTER: Changed to use 'Onest' font with a 'Thin' (100) weight.
     */
     background-color: theme('colors.card');
     color: theme('colors.foreground');
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
+    font-family: 'Onest', sans-serif;
+    font-weight: 100;
   }
 }
 

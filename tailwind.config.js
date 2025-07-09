@@ -25,9 +25,9 @@ export default {
         border: 'hsl(0 0% 100% / 0.1)',
         input: 'hsl(0 0% 100% / 0.1)',
       },
-      // CHANGED: 'Onest' is now 'Geist Sans'
+      // CHANGED: 'Geist Sans' is now 'Onest'
       fontFamily: {
-        sans: ['"Geist Sans"', 'sans-serif'],
+        sans: ['"Onest"', 'sans-serif'],
       },
       letterSpacing: {
         tight: '-0.015em',
