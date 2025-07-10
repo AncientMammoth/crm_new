@@ -9,13 +9,22 @@ const cn = (...inputs) => inputs.filter(Boolean).join(' ');
 
 export default function Navbar({ setSidebarOpen }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [userInitials, setUserInitials] = useState('');
+
   const location = useLocation();
   const onLoginPage = location.pathname === '/login';
 
   useEffect(() => {
     const user = localStorage.getItem("userName");
     setIsLoggedIn(!!user);
+    if (user) {
+        const names = user.split(' ');
+        if (names.length > 1) {
+            setUserInitials((names[0][0] + names[names.length - 1][0]).toUpperCase());
+        } else if (names.length === 1 && names[0].length > 0) {
+            setUserInitials(names[0][0].toUpperCase());
+        }
+    }
   }, [location]);
 
   const navigation = [
@@ -165,11 +174,9 @@ export default function Navbar({ setSidebarOpen }) {
               <div>
                 <Menu.Button className="flex max-w-xs items-center rounded-full bg-card text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-card">
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    className="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="User avatar"
-                  />
+                  <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-foreground font-semibold border border-border">
+                    {userInitials}
+                  </div>
                 </Menu.Button>
               </div>
               <Transition
